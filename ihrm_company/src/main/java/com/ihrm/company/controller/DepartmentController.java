@@ -18,7 +18,7 @@ import java.util.List;
 //2.声明restContoller
 @RestController
 //3.设置父路径
-@RequestMapping(value="/company")   //  company/deparment
+@RequestMapping(value="/company")
 public class DepartmentController extends BaseController{
 
     @Autowired
@@ -26,15 +26,13 @@ public class DepartmentController extends BaseController{
 
     @Autowired
     private CompanyService companyService;
+
     /**
      * 保存
      */
     @RequestMapping(value="/department",method = RequestMethod.POST)
     public Result save(@RequestBody Department department) {
         //1.设置保存的企业id
-        /**
-         * 企业id：目前使用固定值1，以后会解决
-         */
         department.setCompanyId(companyId);
         //2.调用service完成保存企业
         departmentService.save(department);
@@ -87,5 +85,11 @@ public class DepartmentController extends BaseController{
         return new Result(ResultCode.SUCCESS);
     }
 
+
+    @RequestMapping(value="/department/search",method = RequestMethod.POST)
+    public Department findByCode(@RequestParam(value="code") String code,@RequestParam(value="companyId") String companyId) {
+        Department dept = departmentService.findByCode(code,companyId);
+        return dept;
+    }
 
 }

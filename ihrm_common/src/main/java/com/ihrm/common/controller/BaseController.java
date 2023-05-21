@@ -15,6 +15,7 @@ public class BaseController {
     protected HttpServletRequest request;
     protected HttpServletResponse response;
     protected String companyId;
+    private String userId;
     protected String companyName;
     protected Claims claims;
 
@@ -48,6 +49,7 @@ public class BaseController {
             ProfileResult result = (ProfileResult)principals.getPrimaryPrincipal();
             this.companyId = result.getCompanyId();
             this.companyName = result.getCompany();
+            this.userId = result.getUserId();
         }
     }
 
