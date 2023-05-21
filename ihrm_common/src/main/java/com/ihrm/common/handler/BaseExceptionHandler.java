@@ -21,6 +21,7 @@ public class BaseExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
     public Result error(HttpServletRequest request, HttpServletResponse response,Exception e) {
+        e.printStackTrace();
         if(e.getClass() == CommonException.class) {
             //类型转型
             CommonException ce = (CommonException) e;

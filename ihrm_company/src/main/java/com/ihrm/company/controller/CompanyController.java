@@ -51,7 +51,7 @@ public class CompanyController {
     //根据id查询企业
     @RequestMapping(value="/{id}",method = RequestMethod.GET)
     public Result findById(@PathVariable(value="id") String id) throws CommonException {
-
+        //throw new CommonException(ResultCode.UNAUTHORISE);
         Company company = companyService.findById(id);
         Result result = new Result(ResultCode.SUCCESS);
         result.setData(company);
@@ -61,7 +61,7 @@ public class CompanyController {
     //查询全部企业列表
     @RequestMapping(value="",method = RequestMethod.GET)
     public Result findAll() {
-
+        //int i = 1/0;
         List<Company> list = companyService.findAll();
         Result result = new Result(ResultCode.SUCCESS);
         result.setData(list);
