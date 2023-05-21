@@ -11,9 +11,13 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/ihrm?useUnicode=true&characterEncoding=utf8
     username: root
-    password: hsp
+    password: 111111
   #3.JPA
   jpa:
     database: MySQL
     show-sql: true
     open-in-view: true
+jwt:
+  config:
+    key: saas-ihrm
+    ttl: 3600000

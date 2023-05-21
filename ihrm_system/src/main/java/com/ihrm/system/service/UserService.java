@@ -1,7 +1,9 @@
 package com.ihrm.system.service;
 
 import com.ihrm.common.utils.IdWorker;
+import com.ihrm.domain.system.Role;
 import com.ihrm.domain.system.User;
+import com.ihrm.system.dao.RoleDao;
 import com.ihrm.system.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,9 +17,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.lang.annotation.Target;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -26,7 +26,18 @@ public class UserService {
     private UserDao userDao;
 
     @Autowired
+    private RoleDao roleDao;
+
+    @Autowired
     private IdWorker idWorker;
+
+
+    /**
+     * 根据mobile查询用户
+     */
+    public User findByMobile(String mobile) {
+        return userDao.findByMobile(mobile);
+    }
 
     /**
      * 1.保存用户
@@ -110,5 +121,23 @@ public class UserService {
      */
     public void deleteById(String id) {
         userDao.deleteById(id);
+    }
+
+    /**
+     * 分配角色
+     */
+    public void assignRoles(String userId,List<String> roleIds) {
+        //1.根据id查询用户
+        User user = userDao.findById(userId).get();
+        //2.设置用户的角色集合
+        Set<Role> roles = new HashSet<>();
+        for (String roleId : roleIds) {
+            Role role = roleDao.findById(roleId).get();
+            roles.add(role);
+        }
+        //设置用户和角色集合的关系
+        user.setRoles(roles);
+        //3.更新用户
+        userDao.save(user);
     }
 }
