@@ -1,0 +1,5 @@
+# 项目排除路径
+/ihrm_common/target/
+/ihrm_common_model/target/
+/ihrm_company/target/
+/.idea

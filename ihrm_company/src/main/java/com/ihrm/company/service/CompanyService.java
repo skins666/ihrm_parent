@@ -65,6 +65,14 @@ public class CompanyService {
      * 查询企业列表
      */
     public List<Company> findAll() {
+        //用jpa做条件查询
+
+
+
+
         return companyDao.findAll();
+
+
+
     }
 }
