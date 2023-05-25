@@ -161,8 +161,9 @@ public class ArchiveService {
 		for (ArchiveDetail archiveDetail : archiveDetails) {
 			archiveDetail.setId(idWorker.nextId() + "");
 			archiveDetail.setArchiveId(archive.getId());
-			archiveDetailDao.save(archiveDetail);
+
 		}
+		archiveDetailDao.saveAll(archiveDetails);
 	}
 
 	//根据企业id和年份查询归档数据(模糊查询)
