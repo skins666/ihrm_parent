@@ -128,9 +128,17 @@ public class AtteService  {
 			ArchiveMonthlyInfo info = new ArchiveMonthlyInfo(user);
 			//统计每个用户的考勤记录
 			Map map = attendanceDao.statisByUser(user.getId(),atteDate +"%");
+			System.out.println(user.getId() + "--" + atteDate);
 			info.setStatisData(map);
 			list.add(info);
 		}
 		return list;
+	}
+
+	//新建报表,将companySetting中的月份修改为指定的数据
+	public void newReports(String yearMonth, String companyId) {
+		CompanySettings settings = companySettingsDao.findById(companyId).get();
+		settings.setDataMonth(yearMonth);
+		companySettingsDao.save(settings);
 	}
 }

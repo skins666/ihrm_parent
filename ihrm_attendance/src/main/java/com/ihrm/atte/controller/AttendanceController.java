@@ -6,6 +6,7 @@ import com.ihrm.atte.service.ExcelImportService;
 import com.ihrm.common.controller.BaseController;
 import com.ihrm.common.entity.Result;
 import com.ihrm.common.entity.ResultCode;
+import com.ihrm.domain.atte.entity.ArchiveMonthly;
 import com.ihrm.domain.atte.entity.ArchiveMonthlyInfo;
 import com.ihrm.domain.atte.entity.Attendance;
 import com.ihrm.domain.atte.entity.AttendanceConfig;
@@ -63,8 +64,8 @@ public class AttendanceController extends BaseController {
 	 * /attendances/archive/item?archiveDate=201907
 	 */
 	@RequestMapping(value = "/reports" ,method = RequestMethod.GET)
-	public Result reports(String archiveDate) throws Exception {
-		List<ArchiveMonthlyInfo> reports = atteService.getReports(archiveDate, companyId);
+	public Result reports(String atteDate) throws Exception {
+		List<ArchiveMonthlyInfo> reports = atteService.getReports(atteDate, companyId);
 		return new Result(ResultCode.SUCCESS,reports);
 	}
 
@@ -79,4 +80,46 @@ public class AttendanceController extends BaseController {
 		return new Result(ResultCode.SUCCESS);
 	}
 
+	/**
+	 * 新建报表
+	 *  /attendances/newReports?atteDate=201907&yearMonth=201908
+	 *  get
+	 */
+	@RequestMapping(value = "/newReports" ,method = RequestMethod.GET)
+	public Result newReports(String yearMonth) throws Exception {
+		atteService.newReports(yearMonth,companyId);
+		return new Result(ResultCode.SUCCESS);
+	}
+
+	/**
+	 * 归档历史列表
+	 *  /attendances/reports/year?departmentId=1063676045212913664&year=2019
+	 *  get
+	 */
+	@RequestMapping(value = "/reports/year" ,method = RequestMethod.GET)
+	public Result findReportsByYear(String year) throws Exception {
+		List<ArchiveMonthly> list = archiveService.findReportsByYear(year,companyId);
+		return new Result(ResultCode.SUCCESS,list);
+	}
+
+	/**
+	 * 查询归档详情
+	 *  参数 : id : 归档历史主表的id
+	 */
+	@RequestMapping(value = "/reports/{id}" ,method = RequestMethod.GET)
+	public Result findInfosById(@PathVariable String id) throws Exception {
+		List<ArchiveMonthlyInfo> list = archiveService.findMonthlyInfoByAmid(id);
+		return new Result(ResultCode.SUCCESS,list);
+	}
+
+	/**
+	 * 根据用户id和月份
+	 *  查询已归档的考勤明细
+	 *      /archive/{userId}/{yearMonth}
+	 */
+	@RequestMapping(value = "/archive/{userId}/{yearMonth}" ,method = RequestMethod.GET)
+	public Result historyData(@PathVariable String userId,@PathVariable String yearMonth) throws Exception {
+		ArchiveMonthlyInfo info = archiveService.findUserArchiveDetail(userId,yearMonth);
+		return new Result(ResultCode.SUCCESS,info);
+	}
 }

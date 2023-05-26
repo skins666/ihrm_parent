@@ -13,6 +13,7 @@ import com.ihrm.domain.atte.vo.ArchiveItemVO;
 import com.ihrm.domain.atte.vo.ArchiveVO;
 import com.ihrm.domain.atte.vo.ReportVO;
 import com.ihrm.domain.system.User;
+import com.sun.org.apache.bcel.internal.generic.RETURN;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,8 @@ public class ArchiveService {
 		List<User> users = userDao.findByCompanyId(companyId);
 
 		//1.保存归档主表数据
+		atteArchiveMonthlyDao.findByCompanyIdAndArchiveYear(companyId,archiveDate);
+
 		ArchiveMonthly archiveMonthly = new ArchiveMonthly();
 		archiveMonthly.setId(idWorkker.nextId()+"");
 		archiveMonthly.setCompanyId(companyId);
@@ -61,6 +64,7 @@ public class ArchiveService {
 			info.setStatisData(map);
 			info.setId(idWorkker.nextId()+"");
 			info.setAtteArchiveMonthlyId(archiveMonthly.getId());
+			info.setArchiveDate(archiveDate);
 			archiveMonthlyInfoDao.save(info);
 		}
 
@@ -70,5 +74,22 @@ public class ArchiveService {
 		archiveMonthly.setIsArchived(0);
 
 		atteArchiveMonthlyDao.save(archiveMonthly);
+	}
+
+	//根据年份,查询当年的所有考勤历史
+	public List<ArchiveMonthly> findReportsByYear(String year,String companyId) {
+		return atteArchiveMonthlyDao.findByCompanyIdAndArchiveYear(companyId,year);
+	}
+
+	/**
+	 * 查询归档详情列表
+	 */
+	public List<ArchiveMonthlyInfo> findMonthlyInfoByAmid(String id) {
+		return archiveMonthlyInfoDao.findByAtteArchiveMonthlyId(id);
+	}
+
+	//根据用户id和年月查询归档明细
+	public ArchiveMonthlyInfo findUserArchiveDetail(String userId, String yearMonth) {
+		return archiveMonthlyInfoDao.findByUserIdAndArchiveDate(userId,yearMonth);
 	}
 }
